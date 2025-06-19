@@ -4,8 +4,6 @@ import shinythinking.model.Task;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +67,18 @@ public class DailyBrieferView extends JFrame {
         footerPanel.add(updateTimeLabel, BorderLayout.CENTER);
 
         return footerPanel;
+    }
+
+
+    public void setTaskCards(List<Task> tasks) {
+        for (Task task : tasks) {
+            TaskCard taskCard = new TaskCard(task);
+            taskCards.add(taskCard);
+            taskPanel.add(taskCard);
+        }
+
+        taskPanel.revalidate();
+        taskPanel.repaint();
     }
 
     public void setUpdateTime(String time) {

@@ -68,8 +68,7 @@ public class DailyBrieferView extends JFrame {
 
         return footerPanel;
     }
-
-
+    
     public void setTaskCards(List<Task> tasks) {
         for (Task task : tasks) {
             TaskCard taskCard = new TaskCard(task);

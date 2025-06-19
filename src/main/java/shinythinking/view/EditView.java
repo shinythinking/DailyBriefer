@@ -115,4 +115,22 @@ public class EditView extends JFrame {
     private void addWindowClosing(WindowAdapter windowAdapter) {
         addWindowListener(windowAdapter);
     }
+
+    public String[] getInputValues() {
+        return new String[]{
+                titleField.getText(),
+                urlField.getText(),
+                elementField.getText(),
+                userIdField.getText(),
+                doneCheckBox.isSelected() ? "true" : "false"
+        };
+    }
+
+    public void clearInputFields() {
+        titleField.setText("");
+        urlField.setText("");
+        userIdField.setText("");
+        elementField.setText("");
+        doneCheckBox.setSelected(false);
+    }
 }

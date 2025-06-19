@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -28,6 +29,51 @@ public class Task {
         this.done = done;
         this.validateDate = validateDate;
         this.userID = userID;
+    }
+
+    public void refresh() {
+        storeLegacy();
+        refreshTodayStreak();
+        updateDone();
+    }
+
+    private void updateDone() {
+        LocalDate prevDate = previous.getLocalDate();
+        int prevStreak = previous.getStreak();
+
+        LocalDate todayDate = today.getLocalDate();
+        int todayStreak = today.getStreak();
+
+        long dateDiff = ChronoUnit.DAYS.between(prevDate, todayDate);
+        long streakDiff = todayStreak - prevStreak;
+        done = dateDiff <= streakDiff;
+    }
+
+    private void storeLegacy() {
+        previous = today;
+    }
+
+    private void refreshTodayStreak() {
+        String totalUrl = url + userID;
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+
+        WebDriver driver = new ChromeDriver(options);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        try {
+            driver.get(totalUrl);
+
+            WebElement targetElement = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(
+                            By.cssSelector(selector)
+                    )
+            );
+
+            int streak = Integer.getInteger(targetElement.getText());
+            today = new DateStreak(LocalDate.now(), streak);
+        } finally {
+            driver.quit();
+        }
     }
 
     protected void setDone(boolean done) {
@@ -72,5 +118,9 @@ public class Task {
 
     protected LocalDate getValidateDate() {
         return validateDate;
+    }
+
+    public Object[] convertToRow() {
+        return new Object[]{title, title, url, selector, userID};
     }
 }

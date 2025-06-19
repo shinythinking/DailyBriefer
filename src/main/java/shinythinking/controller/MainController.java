@@ -19,6 +19,7 @@ public class MainController {
     private TaskModel model;
     private DailyBrieferView mainView;
     private EditView editView;
+    private ClosingButtonListener closingButtonListener = new ClosingButtonListener();
 
     public MainController(TaskModel model, DailyBrieferView mainView, EditView editView) {
         this.model = model;
@@ -26,11 +27,76 @@ public class MainController {
         this.editView = editView;
 
         init();
+        mainView.addEditButtonListener(new EditButtonListener());
+        mainView.addRefreshButtonListener(new RefreshButtonListener());
+        mainView.addWindowListener(closingButtonListener);
+        editView.addAddButtonListener(new AddButtonListener());
+        editView.addClearButtonListener(new ClearButtonListener());
+        editView.addWindowListener(closingButtonListener);
     }
 
     private void init() {
         mainView.setUpdateTime(LocalDate.now().toString());
         mainView.setTaskCards(model.getTasks());
         mainView.setVisible(true);
+    }
+
+    private class EditButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            editView.loadTasks(model.getTasks());
+            mainView.dispose();
+            editView.setVisible(true);
+        }
+    }
+
+    private class RefreshButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            model.refreshAll();
+            mainView.revalidate();
+            mainView.repaint();
+        }
+    }
+
+    private class AddButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String[] input = editView.getInputValues();
+            String taskTitle = input[0];
+            String taskUrl = input[1];
+            String taskElement = input[2];
+            String userID = input[3];
+            boolean done = input[4].equals("true");
+
+            editView.clearInputFields();
+
+            Task newTask = new Task();
+            newTask.init(taskTitle,taskUrl,taskElement,done, LocalDate.now(), userID);
+            model.addTask(newTask);
+
+            editView.loadTasks(model.getTasks());
+            editView.revalidate();
+            editView.repaint();
+        }
+    }
+
+    private class ClearButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            editView.clearInputFields();
+        }
+    }
+
+    private class ClosingButtonListener extends WindowAdapter {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+            int confirm = JOptionPane.showConfirmDialog(
+                    null, "프로그램을 종료하시겠습니까?", "종료 확인", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                model.saveTaskModel();
+                System.exit(0); // 정상 종료
+            }
+        }
     }
 }

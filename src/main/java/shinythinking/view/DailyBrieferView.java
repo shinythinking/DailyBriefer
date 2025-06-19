@@ -16,7 +16,6 @@ public class DailyBrieferView extends JFrame {
     private JLabel updateTimeLabel;
     private JButton refreshButton;
     private List<TaskCard> taskCards;
-    private WindowEvent windowEvent;
 
     public DailyBrieferView() {
         setTitle("DailyBrief App");
@@ -71,5 +70,16 @@ public class DailyBrieferView extends JFrame {
 
         return footerPanel;
     }
-}
 
+    public void setUpdateTime(String time) {
+        updateTimeLabel.setText("업데이트: " + time);
+    }
+
+    public void addEditButtonListener(ActionListener listener) {
+        editButton.addActionListener(listener);
+    }
+
+    public void addRefreshButtonListener(ActionListener listener) {
+        refreshButton.addActionListener(listener);
+    }
+}

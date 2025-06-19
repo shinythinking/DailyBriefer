@@ -96,4 +96,23 @@ public class EditView extends JFrame {
         wrapper.add(buttonPanel, BorderLayout.SOUTH);
         return wrapper;
     }
+
+    public void loadTasks(List<Task> tasks) {
+        tableModel.setRowCount(0);
+        for (Task task : tasks) {
+            tableModel.addRow(task.convertToRow());
+        }
+    }
+
+    public void addAddButtonListener(ActionListener listener) {
+        addButton.addActionListener(listener);
+    }
+
+    public void addClearButtonListener(ActionListener listener) {
+        clearButton.addActionListener(listener);
+    }
+
+    private void addWindowClosing(WindowAdapter windowAdapter) {
+        addWindowListener(windowAdapter);
+    }
 }

@@ -14,6 +14,12 @@ public class TaskModel implements Serializable {
         tasks = new ArrayList<>();
     }
 
+    public void refreshAll() {
+        for (Task task : tasks) {
+            task.refresh();
+        }
+    }
+
     public List<Task> getTasks() {
         return tasks;
     }
@@ -24,5 +30,10 @@ public class TaskModel implements Serializable {
 
     public void removeTask(Task task) {
         tasks.remove(task);
+    }
+
+    public void saveTaskModel() {
+        LocalIO localIO = new LocalIO();
+        localIO.saveTaskModel(this);
     }
 }

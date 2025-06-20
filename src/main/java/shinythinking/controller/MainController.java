@@ -33,6 +33,7 @@ public class MainController {
         editView.addAddButtonListener(new AddButtonListener());
         editView.addClearButtonListener(new ClearButtonListener());
         editView.addDeleteButtonListener(new DeleteButtonListener());
+        editView.addBackButtonListener(new BackButtonListener());
         editView.addWindowListener(closingButtonListener);
     }
 
@@ -46,7 +47,7 @@ public class MainController {
         @Override
         public void actionPerformed(ActionEvent e) {
             editView.loadTasks(model.getTasks());
-            mainView.dispose();
+            mainView.setVisible(false);
             editView.setVisible(true);
         }
     }
@@ -69,6 +70,11 @@ public class MainController {
             String taskElement = input[2];
             String userID = input[3];
             boolean done = input[4].equals("true");
+            if (taskTitle.trim().isEmpty() || taskUrl.trim().isEmpty() || userID.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(editView, "입력값이 유효하지 않습니다. 모든 필수 필드를 채워주세요.",
+                        "입력 오류", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
             editView.clearInputFields();
 
@@ -99,6 +105,17 @@ public class MainController {
                 editView.revalidate();
                 editView.repaint();
             }
+        }
+    }
+
+    private class BackButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            editView.setVisible(false);
+            mainView.setTaskCards(model.getTasks());
+            mainView.revalidate();
+            mainView.repaint();
+            mainView.setVisible(true);
         }
     }
 

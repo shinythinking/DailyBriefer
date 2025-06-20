@@ -70,6 +70,8 @@ public class DailyBrieferView extends JFrame {
     }
     
     public void setTaskCards(List<Task> tasks) {
+        taskCards.clear();
+        taskPanel.removeAll();
         for (Task task : tasks) {
             TaskCard taskCard = new TaskCard(task);
             taskCards.add(taskCard);

@@ -16,7 +16,7 @@ public class EditView extends JFrame {
     private DefaultTableModel tableModel;
     private JTextField titleField, urlField, userIdField, elementField;
     private JCheckBox doneCheckBox;
-    private JButton addButton, clearButton;
+    private JButton addButton, clearButton, backButton;
 
     public EditView() {
         setTitle("Edit Tasks");
@@ -61,8 +61,8 @@ public class EditView extends JFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JPanel leftPanel = new JPanel(new GridLayout(3, 1, 0, 5));
-        titleField = new JTextField("제목을 입력하세요");
-        urlField = new JTextField("URL을 입력하세요.2");
+        titleField = new JTextField();
+        urlField = new JTextField();
         userIdField = new JTextField();
         leftPanel.add(new JLabel("Title:"));
         leftPanel.add(titleField);
@@ -85,8 +85,10 @@ public class EditView extends JFrame {
         JPanel buttonPanel = new JPanel();
         addButton = new JButton("Add");
         clearButton = new JButton("Clear");
+        backButton = new JButton("Back");
         buttonPanel.add(addButton);
         buttonPanel.add(clearButton);
+        buttonPanel.add(backButton);
 
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.add(panel, BorderLayout.CENTER);
@@ -99,6 +101,10 @@ public class EditView extends JFrame {
         for (Task task : tasks) {
             tableModel.addRow(task.convertToRow());
         }
+    }
+
+    public void addBackButtonListener(ActionListener listener) {
+        backButton.addActionListener(listener);
     }
 
     public void addAddButtonListener(ActionListener listener) {

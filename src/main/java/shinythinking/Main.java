@@ -13,6 +13,7 @@ public class Main {
         if(taskModel == null){
             taskModel = new TaskModel();
         }
+        taskModel.refreshAll();
 
         DailyBrieferView dailyBrieferView = new DailyBrieferView();
         EditView editView = new EditView();

@@ -17,6 +17,7 @@ public class Task {
     protected String url;
     protected String selector;
     private boolean done;
+    private boolean valid;
     private LocalDate validateDate;
     private String userID;
     private DateStreak previous;
@@ -29,12 +30,18 @@ public class Task {
         this.done = done;
         this.validateDate = validateDate;
         this.userID = userID;
+        this.valid = true;
+
+        refreshTodayStreak();
+        storeLegacy();
     }
 
     public void refresh() {
-        storeLegacy();
-        refreshTodayStreak();
-        updateDone();
+        if(valid){
+            storeLegacy();
+            refreshTodayStreak();
+            updateDone();
+        }
     }
 
     private void updateDone() {
@@ -46,7 +53,11 @@ public class Task {
 
         long dateDiff = ChronoUnit.DAYS.between(prevDate, todayDate);
         long streakDiff = todayStreak - prevStreak;
-        done = dateDiff <= streakDiff;
+        if(dateDiff != 0){
+            done = dateDiff <= streakDiff;
+        } else {
+            if(streakDiff > 0) done = true;
+        }
     }
 
     private void storeLegacy() {
@@ -69,11 +80,18 @@ public class Task {
                     )
             );
 
-            int streak = Integer.getInteger(targetElement.getText());
+            int streak = Integer.parseInt(targetElement.getText().trim());
             today = new DateStreak(LocalDate.now(), streak);
+            valid = true;
+        }catch (Exception e){
+            valid = false;
         } finally {
             driver.quit();
         }
+    }
+
+    public boolean isValid() {
+        return valid;
     }
 
     protected void setDone(boolean done) {

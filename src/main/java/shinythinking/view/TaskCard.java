@@ -12,7 +12,9 @@ public class TaskCard extends JPanel {
         setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 4));
 
         Status status;
-        if(task.isDone()) {
+        if(!task.isValid()){
+            status  = Status.WRONG;
+        } else if(task.isDone()) {
             status = Status.DONE;
         } else {
             status = Status.NOT_YET;

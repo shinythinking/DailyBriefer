@@ -28,8 +28,10 @@ public class TaskModel implements Serializable {
         tasks.add(task);
     }
 
-    public void removeTask(Task task) {
-        tasks.remove(task);
+    public void removeTask(int index) {
+        if (index >= 0 && index < tasks.size()) {
+            tasks.remove(index);
+        }
     }
 
     public void saveTaskModel() {

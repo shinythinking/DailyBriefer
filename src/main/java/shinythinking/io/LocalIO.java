@@ -1,6 +1,5 @@
 package shinythinking.io;
 
-import shinythinking.model.Task;
 import shinythinking.model.TaskModel;
 
 import java.io.IOException;

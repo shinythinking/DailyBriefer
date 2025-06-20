@@ -37,11 +37,11 @@ public class EditView extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        String[] columnNames = {"Task", "Title", "URL", "Target Element", "userID", "Delete"};
+        String[] columnNames = {"Title", "URL", "Target Element", "userID", "Delete"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 5;
+                return column == 4;
             }
         };
 

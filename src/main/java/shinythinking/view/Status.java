@@ -4,7 +4,8 @@ import java.awt.*;
 
 enum Status {
     DONE("Done!!", Color.GREEN),
-    NOT_YET("NOT YET!", Color.RED);
+    NOT_YET("NOT YET!", Color.RED),
+    WRONG("WRONG URL!", Color.MAGENTA);
 
     private final String msg;
     private final Color color;

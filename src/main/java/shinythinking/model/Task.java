@@ -70,7 +70,7 @@ public class Task {
         options.addArguments("--headless");
 
         WebDriver driver = new ChromeDriver(options);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         try {
             driver.get(totalUrl);
 
@@ -139,6 +139,6 @@ public class Task {
     }
 
     public Object[] convertToRow() {
-        return new Object[]{title, title, url, selector, userID};
+        return new Object[]{title, url, selector, userID};
     }
 }

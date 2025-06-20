@@ -11,10 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.time.LocalDate;
 
-/*
-1. 새로고침
-2. 편집으로 넘어가기
- */
 public class MainController {
     private TaskModel model;
     private DailyBrieferView mainView;

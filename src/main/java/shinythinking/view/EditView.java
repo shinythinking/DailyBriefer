@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
@@ -46,7 +47,8 @@ public class EditView extends JFrame {
 
         taskTable = new JTable(tableModel);
         taskTable.getColumn("Delete").setCellRenderer(new DeleteButtonRenderer());
-        taskTable.getColumn("Delete").setCellEditor((TableCellEditor) new DeleteButtonEditor(new JCheckBox()));
+        DeleteButtonEditor editor = new DeleteButtonEditor();
+        taskTable.getColumn("Delete").setCellEditor(editor);
         taskTable.setRowHeight(30);
         JScrollPane scrollPane = new JScrollPane(taskTable);
 
@@ -69,7 +71,6 @@ public class EditView extends JFrame {
         leftPanel.add(new JLabel("UserID:"));
         leftPanel.add(userIdField);
 
-
         JPanel rightPanel = new JPanel(new GridLayout(2, 1, 0, 5));
         elementField = new JTextField();
         doneCheckBox = new JCheckBox();
@@ -84,7 +85,6 @@ public class EditView extends JFrame {
         JPanel buttonPanel = new JPanel();
         addButton = new JButton("Add");
         clearButton = new JButton("Clear");
-
         buttonPanel.add(addButton);
         buttonPanel.add(clearButton);
 
@@ -109,6 +109,13 @@ public class EditView extends JFrame {
         clearButton.addActionListener(listener);
     }
 
+    public void addDeleteButtonListener(ActionListener listener) {
+        DeleteButtonEditor editor = (DeleteButtonEditor) taskTable.getColumn("Delete").getCellEditor();
+        if (editor != null) {
+            editor.setDeleteListener(listener);
+        }
+    }
+
     public String[] getInputValues() {
         return new String[]{
                 titleField.getText(),
@@ -125,5 +132,59 @@ public class EditView extends JFrame {
         userIdField.setText("");
         elementField.setText("");
         doneCheckBox.setSelected(false);
+    }
+}
+
+class DeleteButtonRenderer extends JButton implements TableCellRenderer {
+    public DeleteButtonRenderer() {
+        setText("✖");
+        setBackground(Color.RED);
+        setForeground(Color.WHITE);
+    }
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                   boolean hasFocus, int row, int column) {
+        return this;
+    }
+}
+
+class DeleteButtonEditor extends AbstractCellEditor implements TableCellEditor {
+    private JButton button;
+    private int row;
+    private ActionListener deleteListener;
+
+    public DeleteButtonEditor() {
+        button = new JButton("✖");
+        button.setBackground(Color.RED);
+        button.setForeground(Color.WHITE);
+        button.addActionListener(e -> {
+            if (deleteListener != null) {
+                deleteListener.actionPerformed(new ActionEvent(this, row, "delete"));
+            }
+            fireEditingStopped();
+        });
+    }
+
+    public void setDeleteListener(ActionListener deleteListener) {
+        this.deleteListener = deleteListener;
+    }
+
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
+                                                 int row, int column) {
+        this.row = row;
+        return button;
+    }
+
+    @Override
+    public Object getCellEditorValue() {
+        return null;
+    }
+
+    @Override
+    public boolean stopCellEditing() {
+        fireEditingStopped();
+        return true;
     }
 }

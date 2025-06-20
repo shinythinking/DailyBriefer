@@ -32,6 +32,7 @@ public class MainController {
         mainView.addWindowListener(closingButtonListener);
         editView.addAddButtonListener(new AddButtonListener());
         editView.addClearButtonListener(new ClearButtonListener());
+        editView.addDeleteButtonListener(new DeleteButtonListener());
         editView.addWindowListener(closingButtonListener);
     }
 
@@ -72,7 +73,7 @@ public class MainController {
             editView.clearInputFields();
 
             Task newTask = new Task();
-            newTask.init(taskTitle,taskUrl,taskElement,done, LocalDate.now(), userID);
+            newTask.init(taskTitle, taskUrl, taskElement, done, LocalDate.now(), userID);
             model.addTask(newTask);
 
             editView.loadTasks(model.getTasks());
@@ -88,6 +89,19 @@ public class MainController {
         }
     }
 
+    private class DeleteButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int row = e.getID();
+            if (row >= 0 && row < model.getTasks().size()) {
+                model.removeTask(row);
+                editView.loadTasks(model.getTasks());
+                editView.revalidate();
+                editView.repaint();
+            }
+        }
+    }
+
     private class ClosingButtonListener extends WindowAdapter {
         @Override
         public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -95,7 +109,7 @@ public class MainController {
                     null, "프로그램을 종료하시겠습니까?", "종료 확인", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 model.saveTaskModel();
-                System.exit(0); // 정상 종료
+                System.exit(0);
             }
         }
     }

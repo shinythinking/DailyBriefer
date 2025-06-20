@@ -52,6 +52,7 @@ public class MainController {
         @Override
         public void actionPerformed(ActionEvent e) {
             model.refreshAll();
+            mainView.setTaskCards(model.getTasks());
             mainView.revalidate();
             mainView.repaint();
         }
